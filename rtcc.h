@@ -76,6 +76,7 @@ void RTCCgrab(TMS *tm);
 void RTCCInit(void);
 void RTCCSet(TMS *tm);
 void RTCCUnlock(void);
+void RTCCALMSet(void);
 void RTCCSetBinSec(TMS *tm,unsigned char );
 void RTCCSetBinMin(TMS *tm,unsigned char );
 void RTCCSetBinHour(TMS *tm,unsigned char );
