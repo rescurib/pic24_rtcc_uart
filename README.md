@@ -32,3 +32,17 @@ Si están utilizando baterías para alimentar al PIC o van a estar realizando de
 <p align="center">
 <img src="https://1.bp.blogspot.com/-lQWnWBZZUMo/YCsBjH1lllI/AAAAAAAACdw/NCVMA_amUQsxbr3EgBlwm7riKhogTvU1wCLcBGAsYHQ/s586/Circuito_Optos.png" alt="alt text" width="500">
 </p>
+
+### PuTTY en Debian( y derivados)
+```
+$ sudo apt install putty
+```
+Después de instalar:
+```
+sudo adduser <usuario> dialout
+```
+
+Buscamos puertos seriales disponibles con:
+```
+ls /dev/tty*
+```
