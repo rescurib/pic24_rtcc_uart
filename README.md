@@ -27,3 +27,8 @@ typedef struct tm      // Estructura de tiempo
 #define mRTCCDec2Bin(Dec) (10*(Dec>>4)+(Dec&0x0f))
 #define mRTCCBin2Dec(Bin) (((Bin/10)<<4)|(Bin%10))
 ```
+### Aislamiento
+Si están utilizando baterías para alimentar al PIC o van a estar realizando depuración es una buena práctica utilizar opto-acopladores. Esto también permite utilizar módulos de conversión USB-Serial que no tengan salida de 3.3v:
+<p align="center">
+<img src="https://1.bp.blogspot.com/-lQWnWBZZUMo/YCsBjH1lllI/AAAAAAAACdw/NCVMA_amUQsxbr3EgBlwm7riKhogTvU1wCLcBGAsYHQ/s586/Circuito_Optos.png" alt="alt text" width="500">
+</p>
