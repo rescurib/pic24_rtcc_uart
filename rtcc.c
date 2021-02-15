@@ -103,7 +103,7 @@ void RTCCInit(void)
 void RTCCSet(TMS *tm)
 {
      RTCCPTRS _p;
-     //-- Conversión BCD y agrupación
+     //-- ConversiÃ³n BCD y agrupaciÃ³n
      _p.prt11 =  tm->yr;
      _p.prt10 = (tm->mth<<8) + tm->day;
      _p.prt01 = (tm->wkd<<8) + tm->hr;
@@ -112,8 +112,8 @@ void RTCCSet(TMS *tm)
 	RTCCUnlock();				// Desbloquear RTCC
 	
 	RCFGCALbits.RTCPTR = 3;		
-	RTCVAL = _p.prt11;	// Establecer año
-	RTCVAL = _p.prt10;	// Establecer mes:día
+	RTCVAL = _p.prt11;	// Establecer aÃ±o
+	RTCVAL = _p.prt10;	// Establecer mes:dÃ­a
 	RTCVAL = _p.prt01;	// Establecer semana:hora
 	RTCVAL = _p.prt00;	// Establecer min:seg
 
@@ -159,6 +159,38 @@ void RTCCUnlock()
  * Output: Checked BCD value in _time_chk structure.
  *
  ********************************************************************/
+/*********************************************************************
+ * Function: RTCCALMSet
+ *
+ * Preconditions: None.
+ *
+ * Overview: 
+ * The function upload time and date from _alarm into RTCC alarm.
+ *
+ * Input: _alarm - structure containing time and date.
+ *
+ * Output: None.
+ *
+ ********************************************************************/
+void RTCCALMSet(void)
+{
+	RTCCUnlock();				// Unlock the RTCC
+	while(RCFGCALbits.RTCSYNC==1);		//wait for RTCSYNC bit to become 0
+	
+	ALCFGRPTbits.ALRMEN		= 0;		//disable alarm to update it
+	ALCFGRPTbits.ALRMPTR	= 2;  	 	//Point to Month/Day register		
+	ALRMVAL = _alarm.prt10;				//load month & day	
+	ALRMVAL = _alarm.prt01;				//load weekday & hour	
+	ALRMVAL = _alarm.prt00;				//load minute & seconds
+
+	ALCFGRPTbits.AMASK		= 2;		//alarm every 10 seconds
+	ALCFGRPTbits.ARPT		= 0xff;		//alarm 255 times
+	ALCFGRPTbits.CHIME		= 1;		//enable chime
+    ALCFGRPTbits.ALRMEN		= 1;  	 	//enable the alarm
+
+	RCFGCALbits.RTCWREN = 0;	// Lock the RTCC
+}
+
 void RTCCSetBinSec(TMS *tm,unsigned char Sec)
 {
     if(Sec >= 60)  Sec = 0;
