@@ -146,20 +146,6 @@ void RTCCUnlock()
 }
 
 /*********************************************************************
- * Function: RTCCSetBinSec
- *
- * Preconditions: None.
- *
- * Overview: The function verifies setting seconds range, translates
- * it into BCD format and writes into _time_chk structure. To write
- * the structure into clock RTCCSet must be called.
- *
- * Input: Seconds binary value.
- *
- * Output: Checked BCD value in _time_chk structure.
- *
- ********************************************************************/
-/*********************************************************************
  * Function: RTCCALMSet
  *
  * Preconditions: None.
@@ -172,7 +158,7 @@ void RTCCUnlock()
  * Output: None.
  *
  ********************************************************************/
-void RTCCALMSet(void)
+/*void RTCCALMSet(void)
 {
 	RTCCUnlock();				// Unlock the RTCC
 	while(RCFGCALbits.RTCSYNC==1);		//wait for RTCSYNC bit to become 0
@@ -189,7 +175,22 @@ void RTCCALMSet(void)
     ALCFGRPTbits.ALRMEN		= 1;  	 	//enable the alarm
 
 	RCFGCALbits.RTCWREN = 0;	// Lock the RTCC
-}
+}*/
+
+/*********************************************************************
+ * Function: RTCCSetBinSec
+ *
+ * Preconditions: None.
+ *
+ * Overview: The function verifies setting seconds range, translates
+ * it into BCD format and writes into _time_chk structure. To write
+ * the structure into clock RTCCSet must be called.
+ *
+ * Input: Seconds binary value.
+ *
+ * Output: Checked BCD value in _time_chk structure.
+ *
+ ********************************************************************/
 
 void RTCCSetBinSec(TMS *tm,unsigned char Sec)
 {
