@@ -39,10 +39,10 @@ $ sudo apt install putty
 ```
 Después de instalar:
 ```
-sudo adduser <usuario> dialout
+$ sudo adduser <usuario> dialout
 ```
 
 Buscamos puertos seriales disponibles con:
 ```
-ls /dev/tty*
+$ ls /dev/tty*
 ```
