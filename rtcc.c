@@ -80,7 +80,9 @@ void RTCCInit(void)
     
     //RTCC pin pad conected to RTCC second clock
 	PADCFG1bits.RTSECSEL = 1;	
-	RCFGCALbits.RTCOE = 1;		//RTCC Output Enable bit
+	RCFGCALbits.RTCOE = 0;	  // Desabilitar pin de salida RTC
+                              // revisar Fig 29-1(pag. 2) y pag. 4 del
+                              // documento DS39696B.
 
 	/* Enable the RTCC interrupt*/
 	IFS3bits.RTCIF = 0;		//clear the RTCC interrupt flag
@@ -103,7 +105,7 @@ void RTCCInit(void)
 void RTCCSet(TMS *tm)
 {
      RTCCPTRS _p;
-     //-- ConversiÃ³n BCD y agrupaciÃ³n
+     //-- Conversión BCD y agrupación
      _p.prt11 =  tm->yr;
      _p.prt10 = (tm->mth<<8) + tm->day;
      _p.prt01 = (tm->wkd<<8) + tm->hr;
@@ -112,8 +114,8 @@ void RTCCSet(TMS *tm)
 	RTCCUnlock();				// Desbloquear RTCC
 	
 	RCFGCALbits.RTCPTR = 3;		
-	RTCVAL = _p.prt11;	// Establecer aÃ±o
-	RTCVAL = _p.prt10;	// Establecer mes:dÃ­a
+	RTCVAL = _p.prt11;	// Establecer año
+	RTCVAL = _p.prt10;	// Establecer mes:día
 	RTCVAL = _p.prt01;	// Establecer semana:hora
 	RTCVAL = _p.prt00;	// Establecer min:seg
 
@@ -146,38 +148,6 @@ void RTCCUnlock()
 }
 
 /*********************************************************************
- * Function: RTCCALMSet
- *
- * Preconditions: None.
- *
- * Overview: 
- * The function upload time and date from _alarm into RTCC alarm.
- *
- * Input: _alarm - structure containing time and date.
- *
- * Output: None.
- *
- ********************************************************************/
-/*void RTCCALMSet(void)
-{
-	RTCCUnlock();				// Unlock the RTCC
-	while(RCFGCALbits.RTCSYNC==1);		//wait for RTCSYNC bit to become 0
-	
-	ALCFGRPTbits.ALRMEN		= 0;		//disable alarm to update it
-	ALCFGRPTbits.ALRMPTR	= 2;  	 	//Point to Month/Day register		
-	ALRMVAL = _alarm.prt10;				//load month & day	
-	ALRMVAL = _alarm.prt01;				//load weekday & hour	
-	ALRMVAL = _alarm.prt00;				//load minute & seconds
-
-	ALCFGRPTbits.AMASK		= 2;		//alarm every 10 seconds
-	ALCFGRPTbits.ARPT		= 0xff;		//alarm 255 times
-	ALCFGRPTbits.CHIME		= 1;		//enable chime
-    ALCFGRPTbits.ALRMEN		= 1;  	 	//enable the alarm
-
-	RCFGCALbits.RTCWREN = 0;	// Lock the RTCC
-}*/
-
-/*********************************************************************
  * Function: RTCCSetBinSec
  *
  * Preconditions: None.
@@ -191,7 +161,6 @@ void RTCCUnlock()
  * Output: Checked BCD value in _time_chk structure.
  *
  ********************************************************************/
-
 void RTCCSetBinSec(TMS *tm,unsigned char Sec)
 {
     if(Sec >= 60)  Sec = 0;
