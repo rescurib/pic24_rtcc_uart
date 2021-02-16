@@ -89,9 +89,9 @@ int main(void) {
     
     //-- Inicia consola
     xputs("-- Consola en PIC24 --\n");
-    xputs("Comandos  | Descripcion\n");
-    xputs("dt [OPCION]    | Muestra fecha\n");
-    xputs("   -s <fecha>  | Establece fecha en fmt MM/DD/AA hh:mm:ss\n" );
+    xputs("Comandos\t| Descripcion\n");
+    xputs("dt [OPCION]\t| Muestra fecha\n");
+    xputs("   -s <fecha>\t| Establece fecha en fmt MM/DD/AA hh:mm:ss\n" );
     
     for (;;) {
         cmd_status = 1;
@@ -120,9 +120,14 @@ int main(void) {
                                 {
                                     case 's':
                                         //ignorar espacios hasta encontrar prox. char.
-                                        while (*input_ptr == ' ') input_ptr++; 
-                                        setDate(input_ptr);
-                                        cmd_status = 0; // Comando ejecutado correctamente
+                                        while (*input_ptr == ' ') input_ptr++;
+                                        if(( '/' < *(input_ptr) && *(input_ptr) < ':' ))
+                                        {
+                                           setDate(input_ptr);
+                                           cmd_status = 0; // Comando ejecutado correctamente
+                                        }
+                                        else
+                                            cmd_status = 1; // Error
                                         break;
                                 }
                                 break;
@@ -159,9 +164,9 @@ int setDate(char *dateString)
 {
     TMS ttm;
     volatile unsigned char mth=0,day=0,yr=0,hr=0,min=0,sec=0,err=0;
-    char *pt = dateString;
+    volatile char *pt = dateString;
     
-    while(*pt != '\0')
+    for(;;)
     {
       while ( '/' < *pt && *pt < ':' ) // Mientras sea número (Mes) 
       {
@@ -196,7 +201,7 @@ int setDate(char *dateString)
          pt++;
       }
       
-      if (!checkDiv(pt,':',err)) break;
+      if (!checkDiv(pt,':',&err)) break;
       pt++;
               
       while ( '/' < *pt && *pt < ':' ) // Mientras sea número (Minutos) 
@@ -205,7 +210,7 @@ int setDate(char *dateString)
          pt++;
       }
       
-      if (!checkDiv(pt,':',err)) break;
+      if (!checkDiv(pt,':',&err)) break;
       pt++;
       while ( '/' < *pt && *pt < ':' ) // Mientras sea número (Segundos) 
       {
@@ -213,8 +218,7 @@ int setDate(char *dateString)
          pt++;
       }
       
-      //ignorar espacios hasta encontrar prox. char.
-      while (*pt == ' ') pt++; 
+      break;
     }
     
     if(!err) // Si la lectura fue correcta:
@@ -241,10 +245,11 @@ int setDate(char *dateString)
 
 char checkDiv(char *p, char sym,unsigned char* err)
 {
-    if(*p != sym || !( '/' < *(p+1) && *(p+1) < ':' ))
+    if(*p == sym && ( '/' < *(p+1) && *(p+1) < ':' ))
       {
-        *err = 1;
-        return 0;
+        *err = 0;
+        return 1;
       }
-    return 1;
+    *err = 1;
+    return 0;
 }
