@@ -7,6 +7,16 @@ Este es un ejemplo utilizaremos el microcontrolador PIC24FJ32GB002 y el compilad
 
 Para la documentación del módulo se hará referencia al documento [DS39696B](http://ww1.microchip.com/downloads/en/devicedoc/39696b.pdf) que la referencia general del módulo para la familia PIC24F. La parte que hace falta estudiar primero es el metodo de lectura escritura del registro RTCVAL en la página 15 ya que no es directo como en la mayoria de los SFR's sino que requiere del campo RTCPTR del registro RCFGCAL (pag. 4) para establecer puntero de inicio hacia los campos de valor (día, mes, año, etc). Este programa no implementa calibración (auto-ajustes contra los errores de pulsos de reloj), se debe consultar página 16.
 
+### Habilitar SOSC
+Para la famila GB:
+```C
+OSCCONbits.SOSCEN = 1; // SOSC habilitado
+```
+En el caso de la familia GA la escritura a OSCON está protegida por lo que se debe usar:
+```C
+__builtin_write_OSCCONL(OSCCON | 0x02); // SOSC habilitado
+````
+
 ### Estructura de tiempo
 La estructura que almacena la infromación del tiempo tiene la siguiente forma:
 
