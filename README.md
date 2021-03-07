@@ -12,7 +12,7 @@ Para la famila GB:
 ```C
 OSCCONbits.SOSCEN = 1; // SOSC habilitado
 ```
-En el caso de la familia GA la escritura a OSCON está protegida por lo que se debe usar:
+En el caso de la familia GA la escritura a OSCCON está protegida por lo que se debe usar:
 ```C
 __builtin_write_OSCCONL(OSCCON | 0x02); // SOSC habilitado
 ````
